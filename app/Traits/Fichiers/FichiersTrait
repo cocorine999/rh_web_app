@@ -1,0 +1,79 @@
+namespace App\Abilities;
+
+use App\Abilities;
+use App\Role;
+
+trait HasAbilitiesTrait {
+
+   public function giveAbilitiesTo(... $abilities) {
+
+    $abilities = $this->getAllAbilities($abilities);
+    dd($abilities);
+    if($abilities === null) {
+      return $this;
+    }
+    $this->abilities()->saveMany($abilities);
+    return $this;
+  }
+
+  public function withdrawAbilitiesTo( ... $abilities ) {
+
+    $abilities = $this->getAllAbilities($abilities);
+    $this->abilities()->detach($abilities);
+    return $this;
+
+  }
+
+  public function refreshAbilities( ... $abilities ) {
+
+    $this->abilities()->detach();
+    return $this->giveAbilitiesTo($abilities);
+  }
+
+  public function hasAbilityTo($ability) {
+
+    return $this->hasAbilityThroughRole($ability) || $this->hasAbility($ability);
+  }
+
+  public function hasAbilityThroughRole($ability) {
+
+    foreach ($ability->roles as $role){
+      if($this->roles->contains($role)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function hasRole( ... $roles ) {
+
+    foreach ($roles as $role) {
+      if ($this->roles->contains('slug', $role)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function roles() {
+
+    return $this->belongsToMany(Role::class,'users_roles');
+
+  }
+  public function abilities() {
+
+    return $this->belongsToMany(Ability::class,'users_abilities');
+
+  }
+  protected function hasAbility($ability) {
+
+    return (bool) $this->abilities->where('slug', $ability->slug)->count();
+  }
+
+  protected function getAllAbilities(array $abilities) {
+
+    return Ability::whereIn('slug',$abilities)->get();
+
+  }
+
+}

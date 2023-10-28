@@ -1,0 +1,469 @@
+
+
+
+        {{-- <div id="form_id" style="display: none!important;" class="block block-rounded d-flex flex-column h-100 mb-4">
+            <div class="bg-body-light rounded-bottom">
+                <a class="block-content block-content-full block-content-sm fs-sm fw-medium d-flex align-items-center justify-content-between"
+                    href="javascript:void(0)">
+                    <span id="update">AJOUT D'UN NOUVEL UTILISATEUR</span>
+
+                </a>
+            </div>
+            <div class="block-content block-content-full justify-content-between align-items-center">
+
+                <form id="user_form" method="POST" action="{{ route('dashboard.users.store') }}">
+                    @csrf
+
+                    <p id="user_form_method"></p>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="last_name">Nom</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <input type="text" id="user-last-name" name="last_name" placeholder="AGBOKOU"
+                            class="form-control form-control-lg @error('last_name') is-invalid @enderror" name="last_name"
+                            value="{{ old('last_name') }}" required autocomplete="last_name" autofocus>
+                        <small class="help-block" style="color:red; font-size:small"></small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="first_name">Prénom</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <input type="text" id="user-first-name" name="first_name" placeholder="Pierre"
+                            class="form-control form-control-lg @error('first_name') is-invalid @enderror" name="first_name"
+                            value="{{ old('first_name') }}" required autocomplete="first_name" autofocus>
+                        <small class="help-block" style="color:red; font-size:small"></small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="date_naissance">Date naissance</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <input type="date" id="user-date-naissance" min="1920-02-26" max="2002-01-31" name="date_naissance"
+                            placeholder="1996-04-21"
+                            class="form-control form-control-lg @error('date_naissance') is-invalid @enderror"
+                            name="date_naissance" value="{{ old('date_naissance') }}" required
+                            autocomplete="date_naissance" autofocus>
+                        <small class="help-block" style="color:red; font-size:small"></small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="civilite">Civilité</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <select class="form-select" id="user-civilite" name="civilite"
+                            class="form-control form-control-lg @error('civilite') is-invalid @enderror">
+                            <option selected="">Faites votre choix</option>
+                            <option value="mr">Monsieur</option>
+                            <option value="mme">Madame</option>
+                            <option value="mlle">Demoiselle</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="status_matrimoniale">Status matimoniale</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <select class="form-select" id="user-status-matrimoniale" name="status_matrimoniale"
+                            class="form-control form-control-lg @error('civilite') is-invalid @enderror">
+                            <option selected="">Faites votre choix</option>
+                            <option value="Célibataire">Célibataire</option>
+                            <option value="Fiancé(e)">Fiancé(e)</option>
+                            <option value="Marié(e)">Marié(e)</option>
+                            <option value="Divorcé">Divorcé</option>
+                            <option value="Veuf(ve)">Veuf(ve)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="telephone">Téléphone</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <input type="number" id="user-telephone" name="telephone" placeholder="90000000"
+                            class="form-control form-control-lg @error('telephone') is-invalid @enderror" name="telephone"
+                            value="{{ old('telephone') }}" required autocomplete="telephone" autofocus>
+                        <small class="help-block" style="color:red; font-size:small"></small>
+                    </div>
+
+
+                    <div class="mb-4">
+                        <label class="form-label" for="email">Adresse email</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <input type="email" id="user-email" name="email" placeholder="90000000"
+                            class="form-control form-control-lg @error('email') is-invalid @enderror" name="email"
+                            value="{{ old('email') }}" required autocomplete="email" autofocus>
+                        <small class="help-block" style="color:red; font-size:small"></small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="role">Rôle</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <select class="form-select" id="user-roles" name="roles[]" multiple
+                            onclick="event.preventDefault(); window.abilities = JSON.parse('{{ json_encode($abilities) }}');"
+                            class="form-control form-control-lg @error('role') is-invalid @enderror">
+
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}" id="user-roles-{{ $role->id }}">
+                                    {{ str_replace('\\', '', $role->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="role">Poste</label>
+                        <small class="help-block" style="color:red; font-size:small">*</small>
+                        <select class="form-select" id="user-postes" name="postes[]" multiple
+                            onclick="event.preventDefault(); window.abilities = JSON.parse('{{ json_encode($abilities) }}');"
+                            class="form-control form-control-lg @error('role') is-invalid @enderror">
+
+                            @foreach ($postes as $poste)
+                                <option value="{{ $poste->id }}" id="user-postes-{{ $poste->id }}">
+                                    {{ str_replace('\\', '', $poste->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div id="abilities-section" style="display: none;">
+                        <label class="form-label mb-2" for="name">Permissions</label>
+                        <ul style="list-style-type:none; display:inline-block;" id="">
+
+                            @foreach ($abilities as $key => $ability)
+                                <li style="list-style-type:none; display:inline-block;" class="col-xl-2 mb-4">
+                                    <input type="checkbox" name="abilities[]" value="{{ $ability->id }}"
+                                        id="user-abilities-{{ $ability->id }}">
+                                    <div>
+                                        <label class="form-label"
+                                            for="name">{{ \Str::upper(str_replace('\\', '', $ability->name)) }}</label>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    <div class="" style=" display: flex;">
+                        <button type="submit" class="btn btn-primary m-1 action-btn"
+                            style="display: inline-block;">Enregistrer</button>
+                        <button type="button" class="btn btn-secondary m-1 action-btn-cancel" onclick="
+                                                                event.preventDefault(); /* $('#user-last-name').val('');
+                                                                 $('#user-first-name').val('');
+                                                                 $('#user-telephone').val('');
+                                                                 $('#user-email').val('');
+                                                                 $('#user-civilite').val('');
+                                                                 $('#user-status-matrimoniale').val('');
+                                                                 $('#user-date-naissance').val('');
+                                                                 $('#user-postes').val('');
+                                                                 $('#user-roles').val('');
+                                                                $('.action-btn').html('Enregistrer'); */
+
+                                                            document.getElementById('user_form_method').innerHTML = '';
+                                                            document.getElementById('user_form').setAttribute('action','{{ route('dashboard.users.store') }}');
+                                                                $('#update').html('AJOUT D\'UN NOUVEL UTILISATEUR');
+
+                                                                    $('#user_form').load(location.href+' #user_form>*','');
+                                                                " style="display: inline-block;">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div> --}}
+
+
+
+<form action='{{ route('dashboard.users.destroy', $value->id)}}' method='POST'>
+
+
+                                            @canany(['manage-users', 'view-users'])
+                                                <a type='button' id='viewRapport'
+                                                    href='{{ route('dashboard.users.show', $value->id) }}'
+                                                    class='btn btn-sm btn-alt-secondary js-bs-tooltip-enabled'
+                                                    data-bs-toggle='tooltip' title='Consulter'
+                                                    data-bs-original-title='Edit Rapport'>
+                                                    <i class='fa fa-fw fa-eye'></i>
+                                                </a>
+                                            @endcanany
+
+                                            @canany(['manage-users', 'update-users'])
+                                                <a type='submit' id='editUser'
+                                                    onclick='event.preventDefault();
+                                                                                document.getElementById('form_id').style.display = 'block';
+                                                                                            $('#user_form')[0].reset();
+                                                                                                $('#user-last-name').val('{{ $value->last_name }}');
+                                                                                                $('#user-first-name').val('{{ $value->first_name }}');
+                                                                                                $('#user-civilite').val('{{ $value->civilite }}');
+                                                                                                $('#user-date-naissance').val('{{ $value->date_naissance }}');
+                                                                                                $('#user-email').val('{{ $value->email }}');
+                                                                                                $('#user-telephone').val('{{ $value->telephone }}');
+                                                                                                $('#user-status-matrimoniale').val('{{ $value->status_matrimoniale }}');
+
+                                                                                                document.getElementById('abilities-section').style.display = 'block';
+
+                                                                                                var data = {{ $value->abilities->pluck('id') }};
+
+                                                                                                window.User = {{ $value }};
+
+                                                                                                for (var i = 0; i < data.length; i++) {
+                                                                                                    document.getElementById('user-abilities-'+data[i]).checked = true;
+                                                                                                }
+
+                                                                                                /*
+                                                                                                    var roles = {{ $value->roles }};
+
+                                                                                                    for (var i = 0; i < roles.length; i++) {
+
+                                                                                                        var data = roles[i].abilities;
+
+                                                                                                        for (var j = 0; j < data.length; j++) {
+                                                                                                            document.getElementById('user-abilities-'+data[j].id).checked = true;
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    var postes = {{ $value->postes }};
+
+                                                                                                    for (var i = 0; i < postes.length; i++) {
+                                                                                                        var data = postes[i].abilities;
+                                                                                                        for (var j = 0; j < data.length; j++) {
+                                                                                                            document.getElementById('user-abilities-'+data[j].id).checked = true;
+                                                                                                        }
+                                                                                                    }
+                                                                                                */
+                                                                                                var data = {{ $value->roles->pluck('id') }};
+
+                                                                                                for (var i = 0; i < data.length; i++) {
+                                                                                                    document.getElementById('user-roles-'+data[i]).selected = true;
+                                                                                                }
+
+                                                                                                var data = {{ $value->postes->where('pivot.in_function', true)->pluck('id') }};
+
+                                                                                                for (var i = 0; i < data.length; i++) {
+                                                                                                    document.getElementById('user-postes-'+data[i]).selected = true;
+                                                                                                }
+
+                                                                                                $('#update').html('MODIFICATION DES INF0RMATIONS D\'UN UTILISATEUR');
+
+                                                                                                document.getElementById('user_form').setAttribute('action','{{ route('dashboard.users.update', $value->id) }}');'
+                                                    class='btn btn-sm btn-alt-secondary js-bs-tooltip-enabled'
+                                                    data-bs-toggle='tooltip' title='' data-bs-original-title='Edit User'>
+                                                    <i class='fa fa-fw fa-pencil-alt'></i>
+                                                </a>
+                                            @endcanany
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            @canany(['manage-users', 'delete-users'])
+                                                <button type='submit'
+                                                    class='btn btn-sm btn-alt-secondary js-bs-tooltip-enabled'
+                                                    data-bs-toggle='tooltip' title='' data-bs-original-title='Remove Client'>
+                                                    <i class='fa fa-fw fa-times'></i>
+                                                </button>
+                                            @endcanany
+
+                                        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('#user_form')[0].reset();
+                    $('#user-last-name').val(". $value->last_name .");
+                    $('#user-first-name').val(". $value->first_name .");
+                    $('#user-civilite').val(". $value->civilite .");
+                    $('#user-date-naissance').val(". $value->date_naissance .");
+                    $('#user-email').val(". $value->email .");
+                    $('#user-telephone').val(". $value->telephone .");
+                    $('#user-status-matrimoniale').val(". $value->status_matrimoniale .");
+
+                    document.getElementById('abilities-section').style.display = 'block';
+
+                    var data = " . $value->abilities->pluck('id') . ";
+
+                    window.User = " . $value . " ;
+
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById('user-abilities-'+data[i]).checked = true;
+                    }
+
+                    var data = ". $value->roles->pluck('id') . " ;
+
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById('user-roles-'+data[i]).selected = true;
+                    }
+
+                    var data = ".$value->postes->where('pivot.in_function', true)->pluck('id').";
+
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById('user-postes-'+data[i]).selected = true;
+                    }
+
+                    $('#update').html('MODIFICATION DES INF0RMATIONS D\'UN UTILISATEUR');
+
+                    document.getElementById('user_form').setAttribute('action','" . route('dashboard.users.update', $value->id) . "');'
+
+
+
+                onclick='event.preventDefault();
+                    document.getElementById('form_id').style.display = 'block';
+                    $('#user_form')[0].reset();
+                    $('#user-last-name').val(". $value->last_name .");
+                    $('#user-first-name').val(". $value->first_name .");
+                    $('#user-civilite').val(". $value->civilite .");
+                    $('#user-date-naissance').val(". $value->date_naissance .");
+                    $('#user-email').val(". $value->email .");
+                    $('#user-telephone').val(". $value->telephone .");
+                    $('#user-status-matrimoniale').val(". $value->status_matrimoniale .");
+
+                    document.getElementById('abilities-section').style.display = 'block';
+
+                    var data = " . $value->abilities->pluck('id') . ";
+
+                    window.User = " . $value . " ;
+
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById('user-abilities-'+data[i]).checked = true;
+                    }
+
+                    var data = ". $value->roles->pluck('id') . " ;
+
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById('user-roles-'+data[i]).selected = true;
+                    }
+
+                    var data = ".$value->postes->where('pivot.in_function', true)->pluck('id').";
+
+                    for (var i = 0; i < data.length; i++) {
+                        document.getElementById('user-postes-'+data[i]).selected = true;
+                    }
+
+                    $('#update').html('MODIFICATION DES INF0RMATIONS D\'UN UTILISATEUR');
+
+                    document.getElementById('user_form').setAttribute('action','" . route('dashboard.users.update', $value->id) . "');'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+document.getElementById('form_id').style.display = 'block';
+                                                                                                            $('#user_form')[0].reset();
+                                                                                                                $('#user-last-name').val('{{ $user->last_name }}');
+                                                                                                                $('#user-first-name').val('{{ $user->first_name }}');
+                                                                                                                $('#user-civilite').val('{{ $user->civilite }}');
+                                                                                                                $('#user-date-naissance').val('{{ $user->date_naissance }}');
+                                                                                                                $('#user-email').val('{{ $user->email }}');
+                                                                                                                $('#user-telephone').val('{{ $user->telephone }}');
+                                                                                                                $('#user-status-matrimoniale').val('{{ $user->status_matrimoniale }}');
+
+                                                                                                                document.getElementById('abilities-section').style.display = 'block';
+
+                                                                                                                var data = {{ $user->abilities->pluck('id') }};
+
+                                                                                                                window.User = {{ $user }};
+
+                                                                                                                for (var i = 0; i < data.length; i++) {
+                                                                                                                    document.getElementById('user-abilities-'+data[i]).checked = true;
+                                                                                                                }
+
+                                                                                                                /*
+                                                                                                                    var roles = {{ $user->roles }};
+
+                                                                                                                    for (var i = 0; i < roles.length; i++) {
+
+                                                                                                                        var data = roles[i].abilities;
+
+                                                                                                                        for (var j = 0; j < data.length; j++) {
+                                                                                                                            document.getElementById('user-abilities-'+data[j].id).checked = true;
+                                                                                                                        }
+                                                                                                                    }
+
+                                                                                                                    var postes = {{ $user->postes }};
+
+                                                                                                                    for (var i = 0; i < postes.length; i++) {
+                                                                                                                        var data = postes[i].abilities;
+                                                                                                                        for (var j = 0; j < data.length; j++) {
+                                                                                                                            document.getElementById('user-abilities-'+data[j].id).checked = true;
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                */
+                                                                                                                var data = {{ $user->roles->pluck('id') }};
+
+                                                                                                                for (var i = 0; i < data.length; i++) {
+                                                                                                                    document.getElementById('user-roles-'+data[i]).selected = true;
+                                                                                                                }
+
+                                                                                                                var data = {{ $user->postes->where('pivot.in_function', true)->pluck('id') }};
+
+                                                                                                                for (var i = 0; i < data.length; i++) {
+                                                                                                                    document.getElementById('user-postes-'+data[i]).selected = true;
+                                                                                                                }
+
+                                                                                                                $('#update').html('MODIFICATION DES INF0RMATIONS D\'UN UTILISATEUR');
+
+                                                                                                                document.getElementById('user_form').setAttribute('action','{{ route('dashboard.users.update', $user->id) }}');
+
+
+
+
+
+
+
+
+
+
+
+
+
